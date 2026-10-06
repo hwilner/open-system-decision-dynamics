@@ -1,0 +1,13 @@
+# Core numerics
+numpy>=1.24
+scipy>=1.10
+
+# Data handling / statistics / fitting
+pandas>=2.0
+statsmodels>=0.14
+
+# Behavioural data I/O (MetaRDK / OpenNeuro)
+nibabel>=5.0
+
+# Testing
+pytest>=7.4
