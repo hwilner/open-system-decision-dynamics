@@ -1,0 +1,18 @@
+# Analysis stack for the MetaRDK pipeline (Issues #1-#4).
+#
+# None of these packages is imported by a committed module yet: the package
+# itself is numpy-only.  They are listed separately so that the test
+# environment stays small and so that the point at which the data stack
+# actually enters the code base stays visible.
+#
+# Install with: pip install -r requirements-analysis.txt
+
+# Data handling
+pandas>=2.0
+
+# Statistics and fitting
+scipy>=1.10
+statsmodels>=0.14
+
+# Behavioural data I/O (MetaRDK / OpenNeuro)
+nibabel>=5.0

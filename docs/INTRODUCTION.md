@@ -133,11 +133,12 @@ Rabi drive, dephasing, and amplitude damping. `src/open_decision/models.py` —
 the two-level choice-probability trajectory (analytic sin² limit when
 gamma = 0), a Laplace-smoothed Markov estimator with log-likelihood, the
 two-level log-likelihood for (time, outcome) observations, and BIC.
-`tests/` — 13 analytic anchors: the [sigma_x, sigma_z] = −2i sigma_y
+`tests/` — 33 unit tests: the [sigma_x, sigma_z] = −2i sigma_y
 algebra, trace preservation, purity conservation under closed evolution,
 coherence decay at exactly 2 gamma, amplitude-damping relaxation, the Rabi
 sin² limit, damping toward 1/2, Markov-matrix recovery, likelihood ordering,
-and BIC arithmetic.
+BIC arithmetic, and the input-contract regressions that keep the package
+from answering a different question than the one it was asked.
 
 ## Key terms
 

@@ -69,6 +69,26 @@ def lindblad_rhs(rho: np.ndarray, h: np.ndarray,
     return rhs
 
 
+def _rk4_step(rho: np.ndarray, h: np.ndarray,
+              l_ops: list[np.ndarray], dt: float) -> np.ndarray:
+    """Advance the density matrix by one fourth-order Runge-Kutta step.
+
+    Args:
+        rho: Current density matrix.
+        h: Hamiltonian.
+        l_ops: Lindblad jump operators.
+        dt: Time step.
+
+    Returns:
+        The density matrix at time ``t + dt``.
+    """
+    k1 = lindblad_rhs(rho, h, l_ops)
+    k2 = lindblad_rhs(rho + 0.5 * dt * k1, h, l_ops)
+    k3 = lindblad_rhs(rho + 0.5 * dt * k2, h, l_ops)
+    k4 = lindblad_rhs(rho + dt * k3, h, l_ops)
+    return rho + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+
+
 def integrate_lindblad(rho0: np.ndarray, h: np.ndarray,
                        l_ops: list[np.ndarray], dt: float,
                        n_steps: int) -> np.ndarray:
@@ -88,13 +108,57 @@ def integrate_lindblad(rho0: np.ndarray, h: np.ndarray,
     traj = np.empty((n_steps + 1,) + rho.shape, dtype=complex)
     traj[0] = rho
     for i in range(1, n_steps + 1):
-        k1 = lindblad_rhs(rho, h, l_ops)
-        k2 = lindblad_rhs(rho + 0.5 * dt * k1, h, l_ops)
-        k3 = lindblad_rhs(rho + 0.5 * dt * k2, h, l_ops)
-        k4 = lindblad_rhs(rho + dt * k3, h, l_ops)
-        rho = rho + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+        rho = _rk4_step(rho, h, l_ops, dt)
         # numerical hygiene: keep Hermitian
         rho = 0.5 * (rho + rho.conj().T)
+        traj[i] = rho
+    return traj
+
+
+def integrate_lindblad_on_grid(rho0: np.ndarray, h: np.ndarray,
+                               l_ops: list[np.ndarray], times: np.ndarray,
+                               max_dt: float) -> np.ndarray:
+    """Integrate the master equation onto an arbitrary increasing time grid.
+
+    Each interval of the requested grid is covered by at least one
+    Runge-Kutta step of size at most ``max_dt``, so the reported states are
+    the solution *at the requested times* rather than at the nearest point of
+    some uniform grid.
+
+    Args:
+        rho0: Initial density matrix.
+        h: Hamiltonian.
+        l_ops: Lindblad jump operators.
+        times: Strictly increasing times at which to report the state.
+        max_dt: Largest permitted Runge-Kutta step (must be positive).
+
+    Returns:
+        Array of shape ``(len(times), d, d)`` with the state trajectory.
+
+    Raises:
+        ValueError: If ``times`` is not a non-empty one-dimensional increasing
+            array, or if ``max_dt`` is not positive.
+    """
+    times = np.asarray(times, dtype=float)
+    if times.ndim != 1 or times.size == 0:
+        raise ValueError("times must be a non-empty 1-D array")
+    if times.size > 1 and np.any(np.diff(times) <= 0):
+        raise ValueError("times must be increasing")
+    if max_dt <= 0:
+        raise ValueError("max_dt must be positive")
+    rho = np.array(rho0, dtype=complex, copy=True)
+    traj = np.empty((times.size,) + rho.shape, dtype=complex)
+    traj[0] = rho
+    for i in range(1, times.size):
+        span = float(times[i] - times[i - 1])
+        # Cover the interval with as many steps as the requested step size
+        # demands, so the accuracy of the uniform case carries over.
+        n_sub = max(1, int(round(span / max_dt)))
+        sub_dt = span / n_sub
+        for _ in range(n_sub):
+            rho = _rk4_step(rho, h, l_ops, sub_dt)
+            # numerical hygiene: keep Hermitian
+            rho = 0.5 * (rho + rho.conj().T)
         traj[i] = rho
     return traj
 

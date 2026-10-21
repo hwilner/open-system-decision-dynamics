@@ -17,6 +17,7 @@ from open_decision.lindblad import (
     dephasing_operators,
     dissipator,
     integrate_lindblad,
+    integrate_lindblad_on_grid,
     lindblad_rhs,
     rabi_hamiltonian,
 )
@@ -45,6 +46,7 @@ __all__ = [
     "estimate_markov_matrix",
     "ground_state",
     "integrate_lindblad",
+    "integrate_lindblad_on_grid",
     "lindblad_rhs",
     "markov_log_likelihood",
     "rabi_hamiltonian",
