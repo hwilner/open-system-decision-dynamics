@@ -47,7 +47,7 @@ rooms at speed omega. With no honey, the math is exact and beautiful:
   p1(t) = sin²(omega · t / 2)
 
 — a perfect sine-squared wave: decided, undecided again, decided... Our
-code reproduces this wave to 2 decimal places (it is one of the 13 tests).
+code reproduces this wave to 2 decimal places (it is one of the 33 tests).
 
 **The honey (dephasing, gamma).** Real brains are noisy and real decisions
 "lock in" gradually: the corridor slowly closes. The math says the corridor

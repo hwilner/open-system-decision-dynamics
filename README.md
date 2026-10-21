@@ -1,5 +1,7 @@
 # open-system-decision-dynamics
 
+[![CI](https://github.com/hwilner/open-system-decision-dynamics/actions/workflows/ci.yml/badge.svg)](https://github.com/hwilner/open-system-decision-dynamics/actions/workflows/ci.yml)
+
 **Quantum-like open-system dynamics (Lindblad master equation) as a model of
 perceptual decision-making — tested against classical Markov and
 drift-diffusion baselines on the MetaRDK random-dot-kinematogram dataset.**
@@ -43,7 +45,15 @@ baselines out of sample (BIC), the framework is falsified for this task.
 
 ```bash
 pip install -r requirements.txt
-PYTHONPATH=src pytest tests/ -q        # 13 analytic anchors, all pass
+pytest -q                           # 33 unit tests, all pass
+```
+
+The `src` layout is on the path through `pyproject.toml`, so no `PYTHONPATH`
+is needed. Without `pytest` installed, the same suite runs on the standard
+library runner:
+
+```bash
+PYTHONPATH=src python -m unittest discover -s tests
 ```
 
 ```python
@@ -61,7 +71,8 @@ p = choice_probability_trajectory(omega=2.0, gamma=0.3, times=times)
 |---|---|
 | `src/open_decision/lindblad.py` | Pauli operators, commutators, dissipators, RK4 master-equation integrator, Rabi Hamiltonian, dephasing/damping channels |
 | `src/open_decision/models.py` | Choice-probability trajectories, Markov estimator + likelihood, two-level likelihood, BIC |
-| `tests/` | 13 unit tests (Rabi sin² limit, dephasing rate 2γ, amplitude-damping relaxation, Markov recovery, BIC algebra) |
+| `tests/` | 33 unit tests (Rabi sin² limit, dephasing rate 2γ, amplitude-damping relaxation, Markov recovery, BIC algebra, and input-contract regressions) |
+| `.github/workflows/ci.yml` | Test matrix (Python 3.11–3.13) and a packaging check, run on every push and pull request |
 | `docs/INTRODUCTION.md` | publication-quality introduction with derivations |
 | `docs/EXTENDED_INTRODUCTION.md` | high-school-level version with analogies and links |
 | `docs/METHODS.md` | MetaRDK data, preprocessing, fitting, model comparison |
