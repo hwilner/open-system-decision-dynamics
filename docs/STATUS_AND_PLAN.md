@@ -27,17 +27,17 @@
 ## Planned
 
 The milestones below are the plan; the issue column gives the GitHub issue
-that tracks each one, and is empty for milestones that are not filed yet.
+that tracks each one.
 
 | Milestone | Issue | Depends on |
 |---|---|---|
 | 1. MetaRDK downloader + trial table | #1 | — |
 | 2. Behavioural targets (choice curves, RT distributions) | #2 | 1 |
-| 3. Open-system fitting pipeline (per-subject, per-coherence) | — | 2 |
-| 4. Baselines: Markov + reference DDM likelihoods | — | 2 |
-| 5. Model comparison: BIC + held-out CV + recovery checks | — | 3, 4 |
-| 6. H2/H3: gamma as a trait; coherence-dependent regime | — | 3 |
-| 7. Figures (incl. PaperBanana-style schematic) + write-up | — | 5, 6 |
+| 3. Open-system fitting pipeline (per-subject, per-coherence) | #6 | 2 |
+| 4. Baselines: Markov + reference DDM likelihoods | #7 | 2 |
+| 5. Model comparison: BIC + held-out CV + recovery checks | #8 | 6, 7 |
+| 6. H2/H3: gamma as a trait; coherence-dependent regime | #9 | 6 |
+| 7. Figures (incl. PaperBanana-style schematic) + write-up | #10 | 8, 9 |
 
 Software issues filed alongside the sweep of 2026-10-21:
 
